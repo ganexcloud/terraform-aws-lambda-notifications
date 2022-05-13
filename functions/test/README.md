@@ -1,0 +1,1 @@
+python-lambda-local -f lambda_handler app.py test/cloudwatch-event-ok.json
