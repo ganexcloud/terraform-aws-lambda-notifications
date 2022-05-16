@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.2](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.1...v1.0.2) (2022-05-16)
+
+
+### Bug Fixes
+
+* Change requests module ([0bca69a](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/0bca69a9dd0533ff1636f6c14811f942cb882579))
+
 ### [1.0.1](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.0...v1.0.1) (2022-05-16)
 
 
