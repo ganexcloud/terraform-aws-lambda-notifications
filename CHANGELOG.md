@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.1](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.0...v1.0.1) (2022-05-16)
+
+
+### Bug Fixes
+
+* **ecs:** Fix sns.ecs event parse ([481722b](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/481722b4e29372fc24832097c61b727e32c40919))
+
 ## 1.0.0 (2022-05-13)
 
 
