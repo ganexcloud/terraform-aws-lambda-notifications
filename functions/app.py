@@ -1,9 +1,9 @@
 import os
 import json
 import logging
-#import requests
+import requests
 import urllib
-from botocore.vendored import requests
+#from botocore.vendored import requests
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
@@ -33,8 +33,8 @@ def handle_event(messenger, event: dict):
         return 's3'
 
     # SNS
-    elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and event['Records'][0]['EventSource'] == 'aws:sns' and 'aws.codepipeline' not in event['Records'][0]['Sns']['Message'] and 'AlarmName' not in event['Records'][0]['Sns']['Message']:
-        return 'sns'
+    #elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and event['Records'][0]['EventSource'] == 'aws:sns' and 'aws.codepipeline' not in event['Records'][0]['Sns']['Message'] and 'AlarmName' not in event['Records'][0]['Sns']['Message']:
+    #    return 'sns'
 
     # Codepipeline
     elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.codepipeline' in event['Records'][0]['Sns']['Message']:
@@ -107,7 +107,8 @@ def handle_event(messenger, event: dict):
             return message
 
     # ECS
-    elif 'source' in event and event['source'] == 'aws.ecs':
+    if 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.ecs' in event['Records'][0]['Sns']['Message']:
+    #if 'Records' in event and len(event['Records']) > 0 and event['Records'][0]['source'] == 'aws.ecs':
         def ecs_events_parser(detail_type, detail):
             if detail_type == 'ECS Container Instance State Change':
                 result = f'*Instance ID:* ' + detail['ec2InstanceId'] + '\n' + \
@@ -177,19 +178,22 @@ def handle_event(messenger, event: dict):
                 result = f'Detail type "{detail_type}" unknown, see the original event on ECS to more informations.'
                 return result
 
-        event_id = event.get('id')
-        detail_type = event.get('detail-type')
-        account = event.get('account')
-        time = event.get('time')
-        region = event.get('region')
+        message = json.loads(event['Records'][0]['Sns']['Message'])
+
+        #for record in event['Records']:
+        event_id = message.get('id')
+        detail_type = message.get('detail-type')
+        account = message.get('account')
+        time = message.get('time')
+        region = message.get('region')
         resources = []
-        for resource in event['resources']:
+        for resource in message.get('resources'):
             try:
                 resources.append(resource.split(':')[5])
             except Exception:
                 log.error('Error parsing the resource ARN: `{}`'.format(resource))
                 resources.append(resource)
-        detail = ecs_events_parser(detail_type, event.get('detail'))
+        detail = ecs_events_parser(detail_type, message.get('detail'))
         blocks = list()
         contexts = list()
         footer = list()
@@ -262,9 +266,9 @@ def handle_event(messenger, event: dict):
             })
             return {'embeds': blocks}
 
-        elif MESSENGER == 'squadcast':
+        elif messenger == 'squadcast':
             message = {
-                "message": f"{title}",
+                "message": f'{title}',
                 "description": f'{detail}',
                # "status": f"{squadcast_status}",
                 "event_id": "6"
@@ -351,13 +355,12 @@ def post(WEBHOOK_URL, message):
 def lambda_handler(event, context):
     if LOG_EVENTS:
         log.info('Event logging enabled: `{}`'.format(json.dumps(event)))
-
     if MESSENGER in ('slack', 'discord', 'squadcast'):
         message = handle_event(MESSENGER, event)
         response = post(WEBHOOK_URL, message)
         if response not in (200,204):
             log.error(
-                "Error: received status `{}` using event `{}` and context `{}`".format(response, event, context))
+                "Error: received status `{}` using event `{}` and context `{}`".format(response, json.dumps(event, indent=4), context))
         return json.dumps({"code": response})
 
     else:
