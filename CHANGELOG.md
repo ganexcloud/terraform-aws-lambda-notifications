@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.3](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.2...v1.0.3) (2022-09-16)
+
+
+### Bug Fixes
+
+* Adjusting squadcast event_id and upgrade python to 3.9 ([c92df01](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/c92df01b12e067b7291beee4935c9ec8943251e0))
+
 ### [1.0.2](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.1...v1.0.2) (2022-05-16)
 
 
