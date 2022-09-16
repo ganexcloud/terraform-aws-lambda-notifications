@@ -88,7 +88,7 @@ def handle_event(messenger, event: dict):
                 "message": f"CodePipeline {pipeline} {status}",
                 "description": f"**Pipeline:** {pipeline} \n**Status:** {status} \n**URL:** {pipeline_url} \n**Priority:** P5",
                 "status": f"{squadcast_status}",
-                "event_id": "6"
+                "event_id": f"CodePipeline {pipeline}"
             }
             return message
 
@@ -271,7 +271,7 @@ def handle_event(messenger, event: dict):
                 "message": f'{title}',
                 "description": f'{detail}',
                # "status": f"{squadcast_status}",
-                "event_id": "6"
+                "event_id": f'{title}'
             }
             return message
 
@@ -325,7 +325,7 @@ def handle_event(messenger, event: dict):
                 "message": alarmName,
                 "description": f"{alarmDescription} \n**URL:** {alarm_url} \n**Message:** {message}\n**Priority:** P5",
                 "status": f"{squadcast_status}",
-                "event_id": "6"
+                "event_id": alarmName
             }
             return message
 
