@@ -86,7 +86,7 @@ def handle_event(messenger, event: dict):
         elif messenger == 'squadcast':
             message = {
                 "message": f"CodePipeline {pipeline} {status}",
-                "description": f"**AccountID:** {aws_account_id} \n**Pipeline:** {pipeline} \n**Status:** {status} \n**URL:** {pipeline_url} \n**Priority:** P5",
+                "description": f"**AWS Account:** {aws_account_id} \n**AWS Region:** {aws_region} \n**Pipeline:** {pipeline} \n**Status:** {status} \n**URL:** {pipeline_url} \n**Priority:** P5",
                 "status": f"{squadcast_status}",
                 "event_id": f"CodePipeline {pipeline} {status}"
             }
@@ -158,7 +158,7 @@ def handle_event(messenger, event: dict):
         elif messenger == 'squadcast':
             message = {
                 "message": f"CodeBuild {project_name} {status}",
-                "description": f"**AccountID:** {aws_account_id} \n**Project:** {project_name} \n**Status:** {status} \n**URL:** {codebuild_url} \n**Priority:** P5",
+                "description": f"**AWS Account:** {aws_account_id} \n**AWS Region:** {aws_region} \n**Project:** {project_name} \n**Status:** {status} \n**URL:** {codebuild_url} \n**Priority:** P5",
                 "status": f"{squadcast_status}",
                 "event_id": f"CodeBuild {project_name} {status}"
             }
