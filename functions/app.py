@@ -86,9 +86,81 @@ def handle_event(messenger, event: dict):
         elif messenger == 'squadcast':
             message = {
                 "message": f"CodePipeline {pipeline} {status}",
-                "description": f"**Pipeline:** {pipeline} \n**Status:** {status} \n**URL:** {pipeline_url} \n**Priority:** P5",
+                "description": f"**AWS Account:** {aws_account_id} \n**AWS Region:** {aws_region} \n**Pipeline:** {pipeline} \n**Status:** {status} \n**URL:** {pipeline_url} \n**Priority:** P5",
                 "status": f"{squadcast_status}",
-                "event_id": f"CodePipeline {pipeline}"
+                "event_id": f"CodePipeline {pipeline} {status}"
+            }
+            return message
+
+        # Discord
+        elif messenger == 'discord':
+            color = int(color, base=16)
+            message = {
+                'embeds': [
+                    {
+                        "title": f"CodePipeline {pipeline} {status}",
+                        "description": f"[Open]({pipeline_url})",
+                        "color": color
+                    }
+                ]
+            }
+            return message
+
+    # CodeBuild
+    elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.codebuild' in event['Records'][0]['Sns']['Message']:
+        message = json.loads(event['Records'][0]['Sns']['Message'])
+        aws_account_id = message.get('account', None)
+        aws_region = message.get('region', None)
+        event_time = message.get('time', None)
+        project_name = message.get('detail', {}).get('project-name', None)
+        status = message.get('detail', {}).get('build-status', None)
+        codebuild_url = f'''https://{aws_region}.console.aws.amazon.com/codesuite/codebuild/pipelines/{project_name}/view?region={aws_region}'''
+        color = '808080'
+        blocks = list()
+        footer = list()
+        if status == 'SUCCEEDED':
+            color = '00ff00'
+            status = 'succeeded'
+            squadcast_status = "resolve"
+        elif status == 'FAILED':
+            color = 'ff0000'
+            status = 'failed'
+            squadcast_status = "trigger"
+        elif status == 'IN_PROGRESS':
+            color = '808080'
+            status = 'in-progress'
+            squadcast_status = "resolve"
+        elif status == 'STOPPED':
+            color = 'ff0000'
+            status = 'failed'
+            squadcast_status = "trigger"
+        else:
+            color = '000000'
+            status = 'unknow'
+            squadcast_status = "trigger"
+
+        # Slack
+        if messenger == 'slack':
+            message = {
+                'attachments': [
+                    {
+                        "mrkdwn_in": ["text"],
+                        'fallback': 'Pipeline Status',
+                        'color': f"#{color}",
+                        'author_icon': 'https://www.awsgeek.com/AWS-History/icons/AWS-CodeBuild.svg',
+                        "text": f"Codebuild {project_name} {status} (<{codebuild_url}|Open>)"
+                    }
+                ]
+            }
+            return message
+
+        # Squadcast
+        elif messenger == 'squadcast':
+            message = {
+                "message": f"CodeBuild {project_name} {status}",
+                "description": f"**AWS Account:** {aws_account_id} \n**AWS Region:** {aws_region} \n**Project:** {project_name} \n**Status:** {status} \n**URL:** {codebuild_url} \n**Priority:** P5",
+                "status": f"{squadcast_status}",
+                "event_id": f"CodeBuild {project_name} {status}"
             }
             return message
 
