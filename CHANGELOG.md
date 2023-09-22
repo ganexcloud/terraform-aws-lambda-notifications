@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.5](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.4...v1.0.5) (2023-09-22)
+
+
+### Bug Fixes
+
+* add msteams support ([e6d9331](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/e6d93316c6a7361c6439438b4939eca31c8e0b07))
+
 ### [1.0.4](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.3...v1.0.4) (2022-12-02)
 
 
