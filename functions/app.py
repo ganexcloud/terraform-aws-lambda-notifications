@@ -485,7 +485,7 @@ def handle_event(messenger, event: dict):
 def post(WEBHOOK_URL, message):
     log.debug(f'Sending message: {json.dumps(message, indent=4)}')
     headers = {'Content-type': 'application/json'}
-    response = requests.post(WEBHOOK_URL, json.dumps(message), headers=headers, timeout=10)
+    response = requests.post(WEBHOOK_URL, json.dumps(message), headers=headers)
     log.debug('Response: {}, message: {}'.format(response.status_code, response.text))
     return response.status_code
 
