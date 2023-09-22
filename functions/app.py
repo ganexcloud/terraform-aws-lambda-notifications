@@ -106,6 +106,22 @@ def handle_event(messenger, event: dict):
             }
             return message
 
+        # Microsoft Teams
+        elif messenger == 'msteams':
+            message = {
+                "@context": "https://schema.org/extensions",
+                "@type": "MessageCard",
+                "themeColor": color,
+                "summary": f"CodePipeline Summary {pipeline} {status}",
+                "title": f"CodePipeline {pipeline} {status}",
+                "sections": [
+                    {
+                        "text": f"**AWS Account:** {aws_account_id} \n\n **AWS Region:** {aws_region} \n\n **Pipeline:** {pipeline} \n\n\n\n<a href=\"{pipeline_url}\">More Info</a>",
+                    }
+                ]
+            }
+            return message
+        
     # CodeBuild
     elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.codebuild' in event['Records'][0]['Sns']['Message']:
         message = json.loads(event['Records'][0]['Sns']['Message'])
@@ -170,7 +186,7 @@ def handle_event(messenger, event: dict):
             message = {
                 'embeds': [
                     {
-                        "title": f"CodePipeline {pipeline} {status}",
+                        "title": f"CodeBuild {pipeline} {status}",
                         "description": f"[Open]({pipeline_url})",
                         "color": color
                     }
@@ -178,6 +194,22 @@ def handle_event(messenger, event: dict):
             }
             return message
 
+        # Microsoft Teams
+        elif messenger == 'msteams':
+            message = {
+                "@context": "https://schema.org/extensions",
+                "@type": "MessageCard",
+                "themeColor": color,
+                "summary": f"CodeBuild Summary {pipeline} {status}",
+                "title": f"CodeBuild {pipeline} {status}",
+                "sections": [
+                    {
+                        "text": f"**AWS Account:** {aws_account_id} \n\n**AWS Region:** {aws_region} \n\n**Project:** {project_name} \n\n**Status:** {status} \n\n**Priority:** P5\n\n<a href=\"{codebuild_url}\">More Info</a>",
+                    }
+                ]
+            }
+            return message
+        
     # ECS
     if 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.ecs' in event['Records'][0]['Sns']['Message']:
     #if 'Records' in event and len(event['Records']) > 0 and event['Records'][0]['source'] == 'aws.ecs':
@@ -338,12 +370,30 @@ def handle_event(messenger, event: dict):
             })
             return {'embeds': blocks}
 
+        # Squadcast
         elif messenger == 'squadcast':
             message = {
                 "message": f'{title}',
                 "description": f'{detail}',
                # "status": f"{squadcast_status}",
                 "event_id": f'{title}'
+            }
+            return message
+
+
+        # Microsoft Teams
+        elif messenger == 'msteams':
+            message = {
+                "@context": "https://schema.org/extensions",
+                "@type": "MessageCard",
+                "themeColor": "EB6016",
+                "summary": title,
+                "title": title,
+                "sections": [
+                    {
+                        "text": detail,
+                    }
+                ]
             }
             return message
 
@@ -415,6 +465,22 @@ def handle_event(messenger, event: dict):
             }
             return message
 
+        # Microsoft Teams
+        elif messenger == 'msteams':
+            message = {
+                "@context": "https://schema.org/extensions",
+                "@type": "MessageCard",
+                "themeColor": color,
+                "summary": alarmName,
+                "title": alarmName,
+                "sections": [
+                    {
+                        "text": f"**AWS Account:** {aws_account_id} \n\n **AWS Region:** {aws_region} \n\n **Description:** {alarmDescription} \n\n**State**: {newState}\n\n<a href=\"{alarm_url}\">More Info</a>",
+                    }
+                ]
+            }
+            return message
+        
 # Post Webhook
 def post(WEBHOOK_URL, message):
     log.debug(f'Sending message: {json.dumps(message, indent=4)}')
@@ -427,7 +493,7 @@ def post(WEBHOOK_URL, message):
 def lambda_handler(event, context):
     if LOG_EVENTS:
         log.info('Event logging enabled: `{}`'.format(json.dumps(event)))
-    if MESSENGER in ('slack', 'discord', 'squadcast'):
+    if MESSENGER in ('slack', 'discord', 'squadcast', 'msteams'):
         message = handle_event(MESSENGER, event)
         response = post(WEBHOOK_URL, message)
         if response not in (200,204):
