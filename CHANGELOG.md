@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.6](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.5...v1.0.6) (2023-10-03)
+
+
+### Bug Fixes
+
+* improve ecs title ([e668c97](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/e668c9736ca2f2294c8fb03f77c945966c1c58f4))
+
 ### [1.0.5](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.4...v1.0.5) (2023-09-22)
 
 
