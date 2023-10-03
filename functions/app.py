@@ -212,7 +212,6 @@ def handle_event(messenger, event: dict):
         
     # ECS
     if 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.ecs' in event['Records'][0]['Sns']['Message']:
-    #if 'Records' in event and len(event['Records']) > 0 and event['Records'][0]['source'] == 'aws.ecs':
         def ecs_events_parser(detail_type, detail):
             if detail_type == 'ECS Container Instance State Change':
                 result = f'*Instance ID:* ' + detail['ec2InstanceId'] + '\n' + \
@@ -263,9 +262,12 @@ def handle_event(messenger, event: dict):
                     log.error('Error parsing taskArn: `{}`'.format(detail['taskArn']))
                     task = detail['taskArn']
                 result = f'*Event Detail:* ' + '\n' + \
+                         '• Region: ' + region + '\n' + \
+                         '• Cluster: ' + detail['clusterArn'] + '\n' + \
                          '• Task Definition: ' + task_definition + '\n' + \
                          '• Last: ' + detail['lastStatus'] + ' ' + '\n' + \
-                         '• Desired: ' + detail['desiredStatus'] + ' '
+                         '• Desired: ' + detail['desiredStatus'] + ' ' + '\n' + \
+                         '• Priority: (P3)' + ' '
                 if container_instance_id != "UNKNOWN":
                     result = result + '\n' + '• Instance ID: ' + container_instance_id
                 if detail['lastStatus'] == 'RUNNING':
@@ -282,14 +284,42 @@ def handle_event(messenger, event: dict):
                 result = f'Detail type "{detail_type}" unknown, see the original event on ECS to more informations.'
                 return result
 
-        message = json.loads(event['Records'][0]['Sns']['Message'])
+        def ecs_events_parser_title(detail_type, detail):
+            if detail_type == 'ECS Container Instance State Change':
+                result = "ECS Container Instance State Change"
+                return result
 
-        #for record in event['Records']:
-        event_id = message.get('id')
+            elif detail_type == 'ECS Deployment State Change':
+                result = "ECS Deployment State Change"
+                return result
+
+            elif detail_type == 'ECS Service Action':
+                result = "ECS Service Action"
+                return result
+
+            elif detail_type == 'ECS Task State Change':
+                try:
+                    reason = detail['stoppedReason']
+                except Exception:
+                    reason = "UNKNOWN"
+                try:
+                    group = detail['group']
+                except Exception:
+                    group = "UNKNOWN"
+                result =  f"{reason} on {group}"
+                return result
+
+            else:
+                result = f'Detail type "{detail_type}" unknown, see the original event on ECS to more informations.'
+                return result
+
+        message = json.loads(event['Records'][0]['Sns']['Message'])
         detail_type = message.get('detail-type')
+        event_id = ecs_events_parser_title(detail_type, message.get('detail'))
         account = message.get('account')
         time = message.get('time')
         region = message.get('region')
+        title = ecs_events_parser_title(detail_type, message.get('detail'))
         resources = []
         for resource in message.get('resources'):
             try:
@@ -301,7 +331,6 @@ def handle_event(messenger, event: dict):
         blocks = list()
         contexts = list()
         footer = list()
-        title = f'*{detail_type}*'
 
         if messenger == 'slack':
             blocks.append(
