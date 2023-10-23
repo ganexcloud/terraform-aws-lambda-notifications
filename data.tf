@@ -47,8 +47,10 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       identifiers = ["*"]
     }
 
-    resources = [
+    resources = var.create_sns_topic ? [
       aws_sns_topic.this[0].arn,
+      ] : [
+      local.sns_topic_arn
     ]
 
     sid = "__default_statement_ID"
@@ -75,8 +77,10 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       identifiers = ["codestar-notifications.amazonaws.com"]
     }
 
-    resources = [
+    resources = var.create_sns_topic ? [
       aws_sns_topic.this[0].arn,
+      ] : [
+      local.sns_topic_arn
     ]
 
     sid = "AWSCodeStarNotifications"
@@ -103,8 +107,10 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       identifiers = ["events.amazonaws.com"]
     }
 
-    resources = [
+    resources = var.create_sns_topic ? [
       aws_sns_topic.this[0].arn,
+      ] : [
+      local.sns_topic_arn
     ]
 
     sid = "AWSCloudWatchNotifications"
