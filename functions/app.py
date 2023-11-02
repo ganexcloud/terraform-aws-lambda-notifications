@@ -447,7 +447,7 @@ def handle_event(messenger, event: dict):
         alarmDescription = message.get('AlarmDescription')
         alarmReason = message.get('NewStateReason')
         trigger = message.get('Trigger')
-        alarm_url = "https://console.aws.amazon.com/cloudwatch/home?region=" + urllib.parse.quote(aws_region, safe='') + "#alarm:alarmFilter=ANY;name=" + urllib.parse.quote(alarmName, safe='')
+        alarm_url = "https://console.aws.amazon.com/cloudwatch/home?region=" + os.environ['AWS_REGION'] + "#alarmsV2:alarm/" + urllib.parse.quote(alarmName, safe='')
         if newState == "ALARM":
             color = "892621"
             squadcast_status = "trigger"
