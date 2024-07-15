@@ -52,18 +52,22 @@ def handle_event(messenger, event: dict):
             color = '00ff00'
             status = 'succeeded'
             squadcast_status = "resolve"
+            msteams_color = "good"
         elif state == 'STARTED':
             color = '00bbff'
             status = 'started'
             squadcast_status = "trigger"
+            msteams_color = "default"
         elif state == 'FAILED':
             color = 'ff0000'
             status = 'failed'
             squadcast_status = "trigger"
+            msteams_color = "attention"
         elif state == 'SUPERSEDED':
             color = '808080'
             status = 'superseded'
             squadcast_status = "resolve"
+            msteams_color = "light"
         else:
             color = '000000'
 
@@ -109,14 +113,47 @@ def handle_event(messenger, event: dict):
         # Microsoft Teams
         elif messenger == 'msteams':
             message = {
-                "@context": "https://schema.org/extensions",
-                "@type": "MessageCard",
-                "themeColor": color,
-                "summary": f"CodePipeline Summary {pipeline} {status}",
-                "title": f"CodePipeline {pipeline} {status}",
-                "sections": [
+                "type": "message",
+                "attachments": [
                     {
-                        "text": f"**AWS Account:** {aws_account_id} \n\n **AWS Region:** {aws_region} \n\n **Pipeline:** {pipeline} \n\n\n\n<a href=\"{pipeline_url}\">More Info</a>",
+                        "contentType": "application/vnd.microsoft.card.adaptive",
+                        "content": {
+                            "type": "AdaptiveCard",
+                            "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+                            "version": "1.4",
+                            "msteams": {  
+                                "width": "Full"  
+                            },  
+                            "body": [
+                                {
+                                    "type": "Container",
+                                    "style": msteams_color,
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "size": "Large",
+                                            "weight": "Bolder",
+                                            "text": f"CodePipeline {pipeline} {status}",
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": f"AWS Account: {aws_account_id}\n\nAWS Region: {aws_region}\n\nPipeline: {pipeline}",
+                                            "wrap": True,
+                                        },
+                                        {
+                                            "type": "ActionSet",
+                                            "actions": [
+                                                {
+                                                    "type": "Action.OpenUrl",
+                                                    "title": "More Info",
+                                                    "url": pipeline_url
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                        }
                     }
                 ]
             }
@@ -138,22 +175,27 @@ def handle_event(messenger, event: dict):
             color = '00ff00'
             status = 'succeeded'
             squadcast_status = "resolve"
+            msteams_color = "good"
         elif status == 'FAILED':
             color = 'ff0000'
             status = 'failed'
             squadcast_status = "trigger"
+            msteams_color = "attention"
         elif status == 'IN_PROGRESS':
             color = '808080'
             status = 'in-progress'
             squadcast_status = "resolve"
+            msteams_color = "default"
         elif status == 'STOPPED':
             color = 'ff0000'
             status = 'failed'
             squadcast_status = "trigger"
+            msteams_color = "default"
         else:
             color = '000000'
             status = 'unknow'
             squadcast_status = "trigger"
+            msteams_color = "default"
 
         # Slack
         if messenger == 'slack':
@@ -197,14 +239,47 @@ def handle_event(messenger, event: dict):
         # Microsoft Teams
         elif messenger == 'msteams':
             message = {
-                "@context": "https://schema.org/extensions",
-                "@type": "MessageCard",
-                "themeColor": color,
-                "summary": f"CodeBuild Summary {pipeline} {status}",
-                "title": f"CodeBuild {pipeline} {status}",
-                "sections": [
+                "type": "message",
+                "attachments": [
                     {
-                        "text": f"**AWS Account:** {aws_account_id} \n\n**AWS Region:** {aws_region} \n\n**Project:** {project_name} \n\n**Status:** {status} \n\n**Priority:** P5\n\n<a href=\"{codebuild_url}\">More Info</a>",
+                        "contentType": "application/vnd.microsoft.card.adaptive",
+                        "content": {
+                            "type": "AdaptiveCard",
+                            "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+                            "version": "1.4",
+                            "msteams": {  
+                                "width": "Full"  
+                            },  
+                            "body": [
+                                {
+                                    "type": "Container",
+                                    "style": msteams_color,
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "size": "Large",
+                                            "weight": "Bolder",
+                                            "text": f"CodeBuild Summary {pipeline} {status}"
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": f"**AWS Account:** {aws_account_id} \n\n**AWS Region:** {aws_region} \n\n**Project:** {project_name} \n\n**Status:** {status} \n\n**Priority:** P5",
+                                            "wrap": True,
+                                        },
+                                        {
+                                            "type": "ActionSet",
+                                            "actions": [
+                                                {
+                                                    "type": "Action.OpenUrl",
+                                                    "title": "More Info",
+                                                    "url": codebuild_url
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                        }
                     }
                 ]
             }
@@ -408,19 +483,41 @@ def handle_event(messenger, event: dict):
                 "event_id": f'{title}'
             }
             return message
-
-
+       
         # Microsoft Teams
         elif messenger == 'msteams':
             message = {
-                "@context": "https://schema.org/extensions",
-                "@type": "MessageCard",
-                "themeColor": "EB6016",
-                "summary": title,
-                "title": title,
-                "sections": [
+                "type": "message",
+                "attachments": [
                     {
-                        "text": detail,
+                        "contentType": "application/vnd.microsoft.card.adaptive",
+                        "content": {
+                            "type": "AdaptiveCard",
+                            "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+                            "version": "1.4",
+                            "msteams": {  
+                                "width": "Full"  
+                            },  
+                            "body": [
+                                {
+                                    "type": "Container",
+                                    "style": "attention",
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "size": "Large",
+                                            "weight": "Bolder",
+                                            "text": title
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": detail,
+                                            "wrap": True,
+                                        }
+                                    ]
+                                }
+                            ],
+                        }
                     }
                 ]
             }
@@ -451,9 +548,11 @@ def handle_event(messenger, event: dict):
         if newState == "ALARM":
             color = "892621"
             squadcast_status = "trigger"
+            msteams_color = "attention"
         elif newState == "OK":
             color = "00c575"
             squadcast_status = "resolve"
+            msteams_color = "good"
 
         # Slack
         if messenger == 'slack':
@@ -497,14 +596,44 @@ def handle_event(messenger, event: dict):
         # Microsoft Teams
         elif messenger == 'msteams':
             message = {
-                "@context": "https://schema.org/extensions",
-                "@type": "MessageCard",
-                "themeColor": color,
-                "summary": alarmName,
-                "title": alarmName,
-                "sections": [
+                "type": "message",
+                "attachments": [
                     {
-                        "text": f"**AWS Account:** {aws_account_id} \n\n **AWS Region:** {aws_region} \n\n **Description:** {alarmDescription} \n\n**State**: {newState}\n\n<a href=\"{alarm_url}\">More Info</a>",
+                        "contentType": "application/vnd.microsoft.card.adaptive",
+                        "content": {
+                            "type": "AdaptiveCard",
+                            "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
+                            "version": "1.4",
+                            "body": [
+                                {
+                                    "type": "Container",
+                                    "style": msteams_color,
+                                    "items": [
+                                        {
+                                            "type": "TextBlock",
+                                            "size": "Large",
+                                            "weight": "Bolder",
+                                            "text": alarmName,
+                                        },
+                                        {
+                                            "type": "TextBlock",
+                                            "text": f"**AWS Account:** {aws_account_id} \n\n **AWS Region:** {aws_region} \n\n **Description:** {alarmDescription} \n\n**State**: {newState}",
+                                            "wrap": "true",
+                                        },
+                                        {
+                                            "type": "ActionSet",
+                                            "actions": [
+                                                {
+                                                    "type": "Action.OpenUrl",
+                                                    "title": "More Info",
+                                                    "url": alarm_url
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ],
+                        }
                     }
                 ]
             }
