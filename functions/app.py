@@ -1,9 +1,9 @@
 import os
 import json
 import logging
-import requests
+#import requests
 import urllib
-#from botocore.vendored import requests
+from botocore.vendored import requests
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
