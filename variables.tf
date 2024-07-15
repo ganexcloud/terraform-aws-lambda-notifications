@@ -1,23 +1,23 @@
 variable "create" {
-  description = "Whether to create all resources"
+  description = "(Required) Whether to create all resources"
   type        = bool
   default     = true
 }
 
 variable "create_sns_topic" {
-  description = "Whether to create new SNS topic"
+  description = "(Required) Whether to create new SNS topic"
   type        = bool
   default     = true
 }
 
 variable "lambda_role" {
-  description = "IAM role attached to the Lambda Function.  If this is set then a role will not be created for you."
+  description = "(Optional) IAM role attached to the Lambda Function.  If this is set then a role will not be created for you."
   type        = string
   default     = ""
 }
 
 variable "lambda_function_name" {
-  description = "The name of the Lambda function to create"
+  description = "(Required) The name of the Lambda function to create"
   type        = string
 }
 
