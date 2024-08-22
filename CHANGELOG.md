@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.8](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.7...v1.0.8) (2024-08-22)
+
+
+### Bug Fixes
+
+* improving cloudwatch teams message ([5cf87d3](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/5cf87d30c1ed3e36c11ee690b87409253a7b4245))
+
 ### [1.0.7](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.6...v1.0.7) (2024-07-15)
 
 
