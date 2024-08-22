@@ -604,6 +604,9 @@ def handle_event(messenger, event: dict):
                             "type": "AdaptiveCard",
                             "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
                             "version": "1.4",
+                            "msteams": {  
+                                "width": "Full"  
+                            },  
                             "body": [
                                 {
                                     "type": "Container",
