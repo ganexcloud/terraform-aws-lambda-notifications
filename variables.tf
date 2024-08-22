@@ -22,7 +22,7 @@ variable "lambda_function_name" {
 }
 
 variable "lambda_description" {
-  description = "The description of the Lambda function"
+  description = "(Optional) The description of the Lambda function"
   type        = string
   default     = null
 }
