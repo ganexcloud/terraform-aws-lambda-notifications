@@ -30,7 +30,7 @@ variable "lambda_description" {
 variable "lambda_layers" {
   description = "(Optional) List of Lambda Layer Version ARNs (maximum of 5) to attach to your Lambda Function"
   type        = list(string)
-  default     = ["arn:aws:lambda:us-east-1:668099181075:layer:AWSLambda-Python-AWS-SDK:4"]
+  default     = []
 }
 
 variable "sns_topic_name" {

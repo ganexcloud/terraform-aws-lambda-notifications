@@ -1,9 +1,8 @@
 import os
 import json
 import logging
-#import requests
-import urllib
-from botocore.vendored import requests
+import urllib.parse
+import urllib.request
 
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
@@ -646,9 +645,13 @@ def handle_event(messenger, event: dict):
 def post(WEBHOOK_URL, message):
     log.debug(f'Sending message: {json.dumps(message, indent=4)}')
     headers = {'Content-type': 'application/json'}
-    response = requests.post(WEBHOOK_URL, json.dumps(message), headers=headers)
-    log.debug('Response: {}, message: {}'.format(response.status_code, response.text))
-    return response.status_code
+    payload = json.dumps(message).encode("utf-8")
+    request = urllib.request.Request(WEBHOOK_URL, data=payload, headers=headers, method="POST")
+    with urllib.request.urlopen(request) as response:
+        body = response.read().decode("utf-8")
+        status_code = response.getcode()
+    log.debug('Response: {}, message: {}'.format(status_code, body))
+    return status_code
 
 # Lambda handler
 def lambda_handler(event, context):
