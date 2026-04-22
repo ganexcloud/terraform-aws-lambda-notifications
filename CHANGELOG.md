@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+### [1.0.9](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.8...v1.0.9) (2026-04-22)
+
+
+### Bug Fixes
+
+* upgrade python requests to urllib ([7685932](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/76859320951780f16345db16ce421e5ad44a52aa))
+
 ### [1.0.8](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.7...v1.0.8) (2024-08-22)
 
 
