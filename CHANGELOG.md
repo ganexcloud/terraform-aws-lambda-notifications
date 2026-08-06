@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.10](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.9...v1.0.10) (2026-08-06)
+
+### Bug Fixes
+
+* **ci:** pin terraform-docs image ([8e50218](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/8e502187c4ba8114dfec92e755cc8fef19758658))
+* **docs:** align provider version ([9531802](https://github.com/ganexcloud/terraform-aws-lambda-notifications/commit/95318022856060966e1c4c8f5fbbc89f326e494b))
+
 ### [1.0.9](https://github.com/ganexcloud/terraform-aws-lambda-notifications/compare/v1.0.8...v1.0.9) (2026-04-22)
 
 
