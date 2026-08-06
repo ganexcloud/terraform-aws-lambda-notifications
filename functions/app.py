@@ -120,9 +120,9 @@ def handle_event(messenger, event: dict):
                             "type": "AdaptiveCard",
                             "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
                             "version": "1.4",
-                            "msteams": {  
-                                "width": "Full"  
-                            },  
+                            "msteams": {
+                                "width": "Full"
+                            },
                             "body": [
                                 {
                                     "type": "Container",
@@ -157,7 +157,7 @@ def handle_event(messenger, event: dict):
                 ]
             }
             return message
-        
+
     # CodeBuild
     elif 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.codebuild' in event['Records'][0]['Sns']['Message']:
         message = json.loads(event['Records'][0]['Sns']['Message'])
@@ -246,9 +246,9 @@ def handle_event(messenger, event: dict):
                             "type": "AdaptiveCard",
                             "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
                             "version": "1.4",
-                            "msteams": {  
-                                "width": "Full"  
-                            },  
+                            "msteams": {
+                                "width": "Full"
+                            },
                             "body": [
                                 {
                                     "type": "Container",
@@ -283,7 +283,7 @@ def handle_event(messenger, event: dict):
                 ]
             }
             return message
-        
+
     # ECS
     if 'Records' in event and len(event['Records']) > 0 and 'EventSource' in event['Records'][0] and 'aws.ecs' in event['Records'][0]['Sns']['Message']:
         def ecs_events_parser(detail_type, detail):
@@ -482,7 +482,7 @@ def handle_event(messenger, event: dict):
                 "event_id": f'{title}'
             }
             return message
-       
+
         # Microsoft Teams
         elif messenger == 'msteams':
             message = {
@@ -494,9 +494,9 @@ def handle_event(messenger, event: dict):
                             "type": "AdaptiveCard",
                             "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
                             "version": "1.4",
-                            "msteams": {  
-                                "width": "Full"  
-                            },  
+                            "msteams": {
+                                "width": "Full"
+                            },
                             "body": [
                                 {
                                     "type": "Container",
@@ -603,9 +603,9 @@ def handle_event(messenger, event: dict):
                             "type": "AdaptiveCard",
                             "$schema":"http://adaptivecards.io/schemas/adaptive-card.json",
                             "version": "1.4",
-                            "msteams": {  
-                                "width": "Full"  
-                            },  
+                            "msteams": {
+                                "width": "Full"
+                            },
                             "body": [
                                 {
                                     "type": "Container",
@@ -640,7 +640,7 @@ def handle_event(messenger, event: dict):
                 ]
             }
             return message
-        
+
 # Post Webhook
 def post(WEBHOOK_URL, message):
     log.debug(f'Sending message: {json.dumps(message, indent=4)}')
